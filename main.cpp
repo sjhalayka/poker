@@ -25,6 +25,11 @@ using namespace std;
 #define STRAIGHT_FLUSH 8
 #define ROYAL_FLUSH 9
 
+#define SPADES 0
+#define HEARTS 1
+#define DIAMONDS 2
+#define CLUBS 3
+
 
 class card
 {
@@ -52,11 +57,11 @@ public:
 
 		cout << ' ';
 
-		if (suit == 0)
+		if (suit == SPADES)
 			cout << "Spades" << endl;
-		else if (suit == 1)
+		else if (suit == HEARTS)
 			cout << "Hearts" << endl;
-		else if (suit == 2)
+		else if (suit == DIAMONDS)
 			cout << "Diamonds" << endl;
 		else
 			cout << "Clubs" << endl;
@@ -166,6 +171,8 @@ void print_hand_classification(short unsigned int hand_class)
 		cout << "Straight Flush";
 	else if (hand_class == ROYAL_FLUSH)
 		cout << "Royal Flush";
+
+	cout << endl;
 }
 
 // These classifications assume that the cards are pre-sorted
@@ -176,7 +183,7 @@ bool is_flush(const vector<card>& sorted_hand)
 	for (size_t i = 0; i < NUM_CARDS_PER_HAND; i++)
 		suit_counts[sorted_hand[i].suit]++;
 
-	if (suit_counts.size() == 1 && suit_counts[0] == NUM_CARDS_PER_HAND)
+	if (suit_counts.size() == 1)
 		return true;
 
 	return false;
@@ -184,44 +191,129 @@ bool is_flush(const vector<card>& sorted_hand)
 
 bool is_straight(const vector<card>& sorted_hand)
 {
+	map<short unsigned int, size_t> value_counts;
 
+	for (size_t i = 0; i < NUM_CARDS_PER_HAND; i++)
+		value_counts[sorted_hand[i].value]++;
 
-	return false;
-}
+	if (value_counts.size() == 5)
+	{
+		if (sorted_hand[4].value == sorted_hand[0].value + 4)
+			return true;
+	}
 
-
-bool is_royal_flush(const vector<card>& sorted_hand)
-{
 	return false;
 }
 
 bool is_straight_flush(const vector<card>& sorted_hand)
 {
+	if (is_straight(sorted_hand) && is_flush(sorted_hand))
+		return true;
+
+	return false;
+}
+
+bool is_royal_flush(const vector<card>& sorted_hand)
+{
+	if (is_straight_flush(sorted_hand))
+	{
+		if (sorted_hand[0].value == 10 && sorted_hand[4].value == ACE)
+			return true;
+	}
+
 	return false;
 }
 
 bool is_four_of_a_kind(const vector<card>& sorted_hand)
 {
+	map<short unsigned int, size_t> value_counts;
+
+	for (size_t i = 0; i < NUM_CARDS_PER_HAND; i++)
+		value_counts[sorted_hand[i].value]++;
+
+	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+		if (ci->second == 4)
+			return true;
+
 	return false;
 }
 
 bool is_full_house(const vector<card>& sorted_hand)
 {
+	map<short unsigned int, size_t> value_counts;
+
+	for (size_t i = 0; i < NUM_CARDS_PER_HAND; i++)
+		value_counts[sorted_hand[i].value]++;
+
+	if (value_counts.size() == 2)
+	{
+		if ((value_counts[0] == 3 && value_counts[1] == 2) ||
+			(value_counts[0] == 2 && value_counts[1] == 3))
+			return true;
+	}
+
 	return false;
 }
 
 bool is_three_of_a_kind(const vector<card>& sorted_hand)
 {
+	map<short unsigned int, size_t> value_counts;
+
+	for (size_t i = 0; i < NUM_CARDS_PER_HAND; i++)
+		value_counts[sorted_hand[i].value]++;
+
+	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+		if (ci->second == 3)
+			return true;
+
 	return false;
 }
 
 bool is_two_pair(const vector<card>& sorted_hand)
 {
+	short unsigned int pair_count = 0;
+
+	map<short unsigned int, size_t> value_counts;
+
+	for (size_t i = 0; i < NUM_CARDS_PER_HAND; i++)
+		value_counts[sorted_hand[i].value]++;
+
+	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+	{
+		if (ci->second == 2)
+		{
+			pair_count++;
+			break;
+		}
+	}
+
+	if (pair_count == 2)
+		return true;
+
 	return false;
 }
 
 bool is_one_pair(const vector<card>& sorted_hand)
 {
+	short unsigned int pair_count = 0;
+
+	map<short unsigned int, size_t> value_counts;
+
+	for (size_t i = 0; i < NUM_CARDS_PER_HAND; i++)
+		value_counts[sorted_hand[i].value]++;
+
+	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+	{
+		if (ci->second == 2)
+		{
+			pair_count++;
+			break;
+		}
+	}
+
+	if (pair_count == 1)
+		return true;
+
 	return false;
 }
 
@@ -264,14 +356,35 @@ short unsigned int classify_hand(const vector<card>& hand)
 
 int main(void)
 {
+	srand(static_cast<unsigned int>(time(0)));
+
 	vector<card> deck;
 	init_deck(deck);
 	shuffle_cards(deck, 1000000);
 
 	vector<card> hand;
-	deal_hand(deck, hand);
+	//deal_hand(deck, hand);
 
-	//sort_cards(hand);
+	card c;
+
+	c.value = ACE;
+	c.suit = DIAMONDS;
+	hand.push_back(c);
+	c.value = KING;
+	c.suit = DIAMONDS;
+	hand.push_back(c);
+	c.value = QUEEN;
+	c.suit = DIAMONDS;
+	hand.push_back(c);
+	c.value = JACK;
+	c.suit = DIAMONDS;
+	hand.push_back(c);
+	c.value = 10;
+	c.suit = DIAMONDS;
+	hand.push_back(c);
+
+
+
 
 	print_hand_classification(classify_hand(hand));
 	print_cards(hand);
