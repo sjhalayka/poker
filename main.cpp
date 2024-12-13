@@ -171,16 +171,21 @@ void print_hand_classification(short unsigned int hand_class)
 // These classifications assume that the cards are pre-sorted
 bool is_flush(const vector<card>& sorted_hand)
 {
-	map<short unsigned int, size_t> value_counts;
 	map<short unsigned int, size_t> suit_counts;
 
+	for (size_t i = 0; i < NUM_CARDS_PER_HAND; i++)
+		suit_counts[sorted_hand[i].suit]++;
 
+	if (suit_counts.size() == 1 && suit_counts[0] == 5)
+		return true;
 
 	return false;
 }
 
 bool is_straight(const vector<card>& sorted_hand)
 {
+
+
 	return false;
 }
 
@@ -223,6 +228,12 @@ bool is_one_pair(const vector<card>& sorted_hand)
 short unsigned int classify_hand(const vector<card>& hand)
 {
 	vector<card> temp_hand = hand;
+
+	if (temp_hand.size() != NUM_CARDS_PER_HAND)
+	{
+		cout << "Error: hand must contain 5 cards" << endl;
+		return HIGH_CARD;
+	}
 
 	sort_cards(temp_hand);
 
