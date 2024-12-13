@@ -176,7 +176,7 @@ bool is_flush(const vector<card>& sorted_hand)
 	for (size_t i = 0; i < NUM_CARDS_PER_HAND; i++)
 		suit_counts[sorted_hand[i].suit]++;
 
-	if (suit_counts.size() == 1 && suit_counts[0] == 5)
+	if (suit_counts.size() == 1 && suit_counts[0] == NUM_CARDS_PER_HAND)
 		return true;
 
 	return false;
