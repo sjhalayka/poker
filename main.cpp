@@ -147,45 +147,25 @@ void deal_hand(vector<card>& cards, vector<card>& hand)
 void print_hand_classification(short unsigned int hand_class)
 {
 	if (hand_class == HIGH_CARD)
-	{
 		cout << "High Card";
-	}
 	else if (hand_class == ONE_PAIR)
-	{
 		cout << "One Pair";
-	}
 	else if (hand_class == TWO_PAIR)
-	{
 		cout << "Two Pair";
-	}
 	else if (hand_class == THREE_OF_A_KIND)
-	{
 		cout << "Three of a kind";
-	}
 	else if (hand_class == STRAIGHT)
-	{
 		cout << "Straight";
-	}
 	else if (hand_class == FLUSH)
-	{
-		cout << "High Card";
-	}
-	else if (hand_class == FULL_HOUSE)
-	{
 		cout << "Flush";
-	}
+	else if (hand_class == FULL_HOUSE)
+		cout << "Full House";
 	else if (hand_class == FOUR_OF_A_KIND)
-	{
 		cout << "Four of a kind";
-	}
 	else if (hand_class == STRAIGHT_FLUSH)
-	{
 		cout << "Straight Flush";
-	}
 	else if (hand_class == ROYAL_FLUSH)
-	{
 		cout << "Royal Flush";
-	}
 }
 
 // These classifications assume that the cards are pre-sorted
@@ -193,6 +173,7 @@ bool is_flush(const vector<card>& sorted_hand)
 {
 	map<short unsigned int, size_t> value_counts;
 	map<short unsigned int, size_t> suit_counts;
+
 
 
 	return false;
