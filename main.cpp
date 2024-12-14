@@ -298,12 +298,12 @@ bool is_three_of_a_kind(const vector<card>& sorted_hand)
 
 bool is_two_pair(const vector<card>& sorted_hand)
 {
-	short unsigned int pair_count = 0;
-
 	map<short unsigned int, size_t> value_counts;
 
 	for (size_t i = 0; i < NUM_CARDS_PER_HAND; i++)
 		value_counts[sorted_hand[i].value]++;
+
+	short unsigned int pair_count = 0;
 
 	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 		if (ci->second == 2)
@@ -344,6 +344,7 @@ short unsigned int classify_hand(const vector<card>& hand)
 		return HIGH_CARD;
 	}
 
+	// THIS IS IMPORTANT
 	sort_cards(temp_hand);
 
 	short unsigned int hand_class = HIGH_CARD;
@@ -380,28 +381,30 @@ int main(void)
 	shuffle_cards(deck, 1000000);
 
 	vector<card> hand;
-	//deal_hand(deck, hand);
-
-	card c;
-
-	c.value = QUEEN;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
-	c.value = KING;
-	c.suit = SPADES;
-	hand.push_back(c);
-	c.value = JACK;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
-	c.value = 10;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
-	c.value = 9;
-	c.suit = HEARTS;
-	hand.push_back(c);
+	deal_hand(deck, hand);
 
 	print_hand_classification(classify_hand(hand));
 	print_cards(hand);
+
+	//card c;
+
+	//c.value = QUEEN;
+	//c.suit = DIAMONDS;
+	//hand.push_back(c);
+	//c.value = QUEEN;
+	//c.suit = SPADES;
+	//hand.push_back(c);
+	//c.value = JACK;
+	//c.suit = DIAMONDS;
+	//hand.push_back(c);
+	//c.value = 10;
+	//c.suit = DIAMONDS;
+	//hand.push_back(c);
+	//c.value = JACK;
+	//c.suit = HEARTS;
+	//hand.push_back(c);
+
+
 
 	return 0;
 }
