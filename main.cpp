@@ -258,8 +258,18 @@ bool is_full_house(const vector<card>& sorted_hand)
 
 	if (value_counts.size() == 2)
 	{
-		if ((value_counts[0] == 3 && value_counts[1] == 2) ||
-			(value_counts[0] == 2 && value_counts[1] == 3))
+		bool found_three = false;
+		bool found_two = false;
+
+		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+		{
+			if (ci->second == 3)
+				found_three = true;
+			else if (ci->second == 2)
+				found_two = true;
+		}
+
+		if (found_three && found_two)
 			return true;
 	}
 
@@ -290,13 +300,8 @@ bool is_two_pair(const vector<card>& sorted_hand)
 		value_counts[sorted_hand[i].value]++;
 
 	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
-	{
 		if (ci->second == 2)
-		{
 			pair_count++;
-			break;
-		}
-	}
 
 	if (pair_count == 2)
 		return true;
@@ -314,13 +319,8 @@ bool is_one_pair(const vector<card>& sorted_hand)
 		value_counts[sorted_hand[i].value]++;
 
 	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
-	{
 		if (ci->second == 2)
-		{
 			pair_count++;
-			break;
-		}
-	}
 
 	if (pair_count == 1)
 		return true;
@@ -339,11 +339,6 @@ short unsigned int classify_hand(const vector<card>& hand)
 	}
 
 	sort_cards(temp_hand);
-
-	for (size_t i = 0; i < temp_hand.size(); i++)
-		temp_hand[i].print();
-
-
 
 	short unsigned int hand_class = HIGH_CARD;
 
@@ -381,30 +376,48 @@ int main(void)
 	vector<card> hand;
 	//deal_hand(deck, hand);
 
+
 	card c;
 
+	//if (hand_class == HIGH_CARD)
+	//	cout << "High Card";
+	//else if (hand_class == ONE_PAIR)
+	//	cout << "One Pair";
+	//else if (hand_class == TWO_PAIR)
+	//	cout << "Two Pair";
+	//else if (hand_class == THREE_OF_A_KIND)
+	//	cout << "Three of a kind";
+	//else if (hand_class == STRAIGHT)
+	//	cout << "Straight";
+	//else if (hand_class == FLUSH)
+	//	cout << "Flush";
+	//else if (hand_class == FULL_HOUSE)
+	//	cout << "Full House";
+	//else if (hand_class == FOUR_OF_A_KIND)
+	//	cout << "Four of a kind";
+	//else if (hand_class == STRAIGHT_FLUSH)
+	//	cout << "Straight Flush";
+	//else if (hand_class == ROYAL_FLUSH)
+	//	cout << "Royal Flush";
 
-	c.value = KING;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
-	c.value = QUEEN;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
-	c.value = ACE;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
 	c.value = JACK;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
 	c.value = 10;
+	c.suit = SPADES;
+	hand.push_back(c);
+	c.value = QUEEN;
+	c.suit = CLUBS;
+	hand.push_back(c);
+	c.value = 5;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
-
-
-
+	c.value = 7;
+	c.suit = HEARTS;
+	hand.push_back(c);
 
 	print_hand_classification(classify_hand(hand));
-	//print_cards(hand);
+	print_cards(hand);
 
 	return 0;
 }
