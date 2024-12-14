@@ -264,18 +264,18 @@ bool is_full_house(const vector<card>& sorted_hand)
 
 	if (value_counts.size() == 2)
 	{
-		bool found_three = false;
-		bool found_two = false;
+		bool found_triplet = false;
+		bool found_pair = false;
 
 		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 		{
 			if (ci->second == 3)
-				found_three = true;
+				found_triplet = true;
 			else if (ci->second == 2)
-				found_two = true;
+				found_pair = true;
 		}
 
-		if (found_three && found_two)
+		if (found_triplet && found_pair)
 			return true;
 	}
 
@@ -384,19 +384,19 @@ int main(void)
 
 	card c;
 
-	c.value = 5;
+	c.value = QUEEN;
+	c.suit = DIAMONDS;
+	hand.push_back(c);
+	c.value = KING;
+	c.suit = SPADES;
+	hand.push_back(c);
+	c.value = JACK;
+	c.suit = DIAMONDS;
+	hand.push_back(c);
+	c.value = 10;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
 	c.value = 9;
-	c.suit = SPADES;
-	hand.push_back(c);
-	c.value = 7;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
-	c.value = 6;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
-	c.value = 8;
 	c.suit = HEARTS;
 	hand.push_back(c);
 
