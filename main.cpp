@@ -189,7 +189,7 @@ bool is_flush(const vector<card>& sorted_hand)
 	return false;
 }
 
-bool is_straight(const vector<card>& sorted_hand)
+bool is_straight(const vector<card> sorted_hand)
 {
 	map<short unsigned int, size_t> value_counts;
 
@@ -198,6 +198,17 @@ bool is_straight(const vector<card>& sorted_hand)
 
 	if (value_counts.size() == 5)
 	{
+		if (sorted_hand[4].value == ACE)
+		{
+			if (sorted_hand[0].value == 2 ||
+				sorted_hand[1].value == 3 ||
+				sorted_hand[2].value == 4 ||
+				sorted_hand[3].value == 5)
+			{
+				return true;
+			}
+		}
+		
 		if (sorted_hand[4].value == sorted_hand[0].value + 4)
 			return true;
 	}
@@ -329,6 +340,11 @@ short unsigned int classify_hand(const vector<card>& hand)
 
 	sort_cards(temp_hand);
 
+	for (size_t i = 0; i < temp_hand.size(); i++)
+		temp_hand[i].print();
+
+
+
 	short unsigned int hand_class = HIGH_CARD;
 
 	if (is_royal_flush(temp_hand))
@@ -367,13 +383,14 @@ int main(void)
 
 	card c;
 
-	c.value = ACE;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
+
 	c.value = KING;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
 	c.value = QUEEN;
+	c.suit = DIAMONDS;
+	hand.push_back(c);
+	c.value = ACE;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
 	c.value = JACK;
@@ -387,7 +404,7 @@ int main(void)
 
 
 	print_hand_classification(classify_hand(hand));
-	print_cards(hand);
+	//print_cards(hand);
 
 	return 0;
 }
