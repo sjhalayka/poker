@@ -6,8 +6,8 @@ using namespace std;
 
 
 #define JACK 11
-#define KING 12
-#define QUEEN 13
+#define QUEEN 12
+#define KING 13
 #define ACE 14
 
 #define NUM_SUITS 4
