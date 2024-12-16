@@ -388,6 +388,67 @@ bool is_card_in_unflipped_cards(card c, const vector<card>& remaining_unflipped_
 	return false;
 }
 
+bool remove_card_from_unflipped_cards(card c, vector<card>& remaining_unflipped_cards)
+{
+	for (size_t i = 0; i < remaining_unflipped_cards.size(); i++)
+	{
+		if (remaining_unflipped_cards[i] == c)
+		{
+			remaining_unflipped_cards.erase(remaining_unflipped_cards.begin() + i);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+size_t get_value_count(const short unsigned int value, const vector<card>& remaining_unflipped_cards)
+{
+	size_t count = 0;
+
+	for (size_t i = 0; i < remaining_unflipped_cards.size(); i++)
+		if (value == remaining_unflipped_cards[i].value)
+			count++;
+
+	return count;
+}
+
+size_t get_suit_count(const short unsigned int suit, const vector<card>& remaining_unflipped_cards)
+{
+	size_t count = 0;
+
+	for (size_t i = 0; i < remaining_unflipped_cards.size(); i++)
+		if (suit == remaining_unflipped_cards[i].suit)
+			count++;
+
+	return count;
+}
+
+bool is_possible_flush(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
+{
+	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+
+	map<short unsigned int, size_t> value_counts;
+	map<short unsigned int, size_t> suit_counts;
+
+	for (size_t i = 0; i < sorted_hand.size(); i++)
+	{
+		value_counts[sorted_hand[i].value]++;
+		suit_counts[sorted_hand[i].suit]++;
+	}
+
+	// Is there only one suit?
+	if (suit_counts.size() != 1)
+		return false;
+
+	size_t the_suit_count = get_suit_count(suit_counts.begin()->first, remaining_unflipped_cards);
+
+	if (the_suit_count < num_wildcards)
+		return false;
+
+	return true;
+}
+
 bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
 	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
@@ -435,7 +496,6 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 	if (false == found_ace && num_wildcards_left > 0)
 	{
-		cout << "scouring for ACE" << endl;
 		card c;
 		c.suit = the_suit;
 		c.value = ACE;
@@ -447,7 +507,6 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 	if (false == found_king && num_wildcards_left > 0)
 	{
-		cout << "scouring for KING" << endl;
 		card c;
 		c.suit = the_suit;
 		c.value = KING;
@@ -459,7 +518,6 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 	if (false == found_queen && num_wildcards_left > 0)
 	{
-		cout << "scouring for QUEEN" << endl;
 		card c;
 		c.suit = the_suit;
 		c.value = QUEEN;
@@ -471,7 +529,6 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 	if (false == found_jack && num_wildcards_left > 0)
 	{
-		cout << "scouring for JACK" << endl;
 		card c;
 		c.suit = the_suit;
 		c.value = JACK;
@@ -483,7 +540,6 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 	if (false == found_10 && num_wildcards_left > 0)
 	{
-		cout << "scouring for 10" << endl;
 		card c;
 		c.suit = the_suit;
 		c.value = 10;
@@ -504,11 +560,6 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 	return true;
 }
-
-
-
-
-
 
 short unsigned int get_best_wild_classification(const vector<card>& hand, const vector<card>& remaining_unflipped_cards)
 {
@@ -533,8 +584,8 @@ short unsigned int get_best_wild_classification(const vector<card>& hand, const 
 	//	best_class = FOUR_OF_A_KIND;
 	//else if (is_possible_full_house(temp_hand, remaining_unflipped_cards))
 	//	best_class = FULL_HOUSE;
-	//else if (is_possible_flush(temp_hand, remaining_unflipped_cards))
-	//	best_class = FLUSH;
+	else if (is_possible_flush(temp_hand, remaining_unflipped_cards))
+		best_class = FLUSH;
 	//else if (is_possible_straight(temp_hand, remaining_unflipped_cards))
 	//	best_class = STRAIGHT;
 	//else if (is_possible_three_of_a_kind(temp_hand, remaining_unflipped_cards))
@@ -562,17 +613,26 @@ int main(void)
 	
 
 
-		card c;
+	card c;
 	hand.clear();
+
 	c.value = QUEEN;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
+	remove_card_from_unflipped_cards(c, deck);
+	
 	c.value = JACK;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
-	c.value = 10;
+	remove_card_from_unflipped_cards(c, deck);
+
+	c.value = 7;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
+	remove_card_from_unflipped_cards(c, deck);
+
+
+
 	//c.value = KING;
 	//c.suit = DIAMONDS;
 	//hand.push_back(c);
@@ -581,6 +641,9 @@ int main(void)
 	//hand.push_back(c);
 
 	
+	
+
+
 	print_hand_classification(get_best_wild_classification(hand, deck));
 
 	print_cards(hand);
