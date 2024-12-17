@@ -34,8 +34,8 @@ short unsigned int get_best_wild_classification(const vector<card>& hand, const 
 	//	best_class = STRAIGHT;
 	//else if (is_possible_three_of_a_kind(temp_hand, remaining_unflipped_cards))
 	//	best_class = THREE_OF_A_KIND;
-	//else if (is_possible_two_pair(temp_hand, remaining_unflipped_cards))
-	//	best_class = TWO_PAIR;
+	else if (is_possible_two_pair(temp_hand, remaining_unflipped_cards))
+		best_class = TWO_PAIR;
 	else if (is_possible_one_pair(temp_hand, remaining_unflipped_cards))
 		best_class = ONE_PAIR;
 
