@@ -651,43 +651,6 @@ bool is_possible_two_pair(const vector<card>& sorted_hand, const vector<card>& r
 }
 
 
-//
-//bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
-//{
-//	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
-//
-//	map<short unsigned int, size_t> value_counts;
-//
-//	for (size_t i = 0; i < sorted_hand.size(); i++)
-//		value_counts[sorted_hand[i].value]++;
-//
-//	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
-//	{
-//		if (ci->second >= 3)
-//			return true;
-//		else if (get_value_count(ci->first, remaining_unflipped_cards) >= 2)
-//			return true;
-//	}
-//
-//	// If we made it this far then we're dealing with 
-//	// making a pair purely out of the remaining unflipped cards
-//	if (num_wildcards >= 3)
-//	{
-//		value_counts.clear();
-//
-//		for (size_t i = 0; i < remaining_unflipped_cards.size(); i++)
-//			value_counts[remaining_unflipped_cards[i].value]++;
-//
-//		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
-//			if (ci->second >= 3)
-//				return true;
-//	}
-//
-//	return false;
-//}
-
-
-
 bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
 	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
@@ -706,7 +669,7 @@ bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<c
 	}
 
 	// If we made it this far then we're dealing with 
-	// making a pair purely out of the remaining unflipped cards
+	// making a triplet purely out of the remaining unflipped cards
 	if (num_wildcards >= 3)
 	{
 		value_counts.clear();
@@ -726,8 +689,6 @@ bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<c
 
 bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-
-
 	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
@@ -744,7 +705,7 @@ bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<ca
 	}
 
 	// If we made it this far then we're dealing with 
-	// making a pair purely out of the remaining unflipped cards
+	// making a quad purely out of the remaining unflipped cards
 	if (num_wildcards >= 4)
 	{
 		value_counts.clear();
@@ -762,3 +723,60 @@ bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<ca
 
 
 
+
+bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
+{
+	size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+
+	map<short unsigned int, size_t> value_counts;
+
+	for (size_t i = 0; i < sorted_hand.size(); i++)
+		value_counts[sorted_hand[i].value]++;
+
+	bool found_pair = false;
+	bool found_triplet = false;
+
+	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+	{
+		const size_t hand_count = get_value_count(ci->first, sorted_hand);
+		const size_t unflipped_count = get_value_count(ci->first, remaining_unflipped_cards);
+
+		if (hand_count + unflipped_count >= 3)
+			found_triplet = true;
+		else if (hand_count + unflipped_count >= 2)
+			found_pair = true;
+	}
+		
+	short unsigned int pair_value = 0;
+	short unsigned int triplet_value = 0;
+
+	if (found_triplet == false)
+	{
+		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+		{
+			if (ci->first != pair_value && get_value_count(ci->first, remaining_unflipped_cards) == 3)
+			{
+				found_triplet = true;
+				break;
+			}
+		}
+	}
+
+	if (found_pair == false)
+	{
+		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+		{
+			if (ci->first != triplet_value && get_value_count(ci->first, remaining_unflipped_cards) == 2)
+			{
+				pair_value = ci->first;
+				found_pair = true;
+				break;
+			}
+		}
+	}
+
+	if (found_pair && found_triplet)
+		return true;
+
+	return false;
+}
