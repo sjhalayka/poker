@@ -604,8 +604,48 @@ bool is_possible_one_pair(const vector<card>& sorted_hand, const vector<card>& r
 }
 
 
+
 bool is_possible_two_pair(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
+	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+
+	map<short unsigned int, size_t> value_counts;
+
+	for (size_t i = 0; i < sorted_hand.size(); i++)
+		value_counts[sorted_hand[i].value]++;
+
+	size_t pair_count = 0;
+
+	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+	{
+		if (ci->second >= 2)
+			pair_count++;
+		else if (get_value_count(ci->first, remaining_unflipped_cards) >= 1)
+			pair_count++;
+	}
+
+	if (pair_count >= 2)
+		return true;
+
+	// If we made it this far then we're dealing with 
+	// making two pair purely out of the remaining unflipped cards
+
+	const size_t num_wildcards_needed = 2 * (2 - pair_count);
+
+	if (num_wildcards >= num_wildcards_needed)
+	{
+		value_counts.clear();
+
+		for (size_t i = 0; i < remaining_unflipped_cards.size(); i++)
+			value_counts[remaining_unflipped_cards[i].value]++;
+
+		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+			if (ci->second >= 2)
+				pair_count++;
+	}
+
+	if (pair_count >= 2)
+		return true;
 
 	return false;
 }
