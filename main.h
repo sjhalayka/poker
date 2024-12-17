@@ -464,6 +464,8 @@ bool is_possible_flush(const vector<card>& sorted_hand, const vector<card>& rema
 	return true;
 }
 
+
+
 bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
 	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
@@ -485,6 +487,7 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 	if (value_counts.size() != sorted_hand.size())
 		return false;
 
+
 	short unsigned int the_suit = suit_counts.begin()->first;
 
 	bool found_ace = false;
@@ -495,7 +498,7 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 	{
-		if (ci->first == ACE)
+		if (ci->first == ACE || ci->first == 1)
 			found_ace = true;
 		else if (ci->first == KING)
 			found_king = true;
@@ -564,16 +567,16 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 		num_wildcards_left--;
 	}
 
-	if (found_ace == false ||
-		found_king == false ||
-		found_queen == false ||
-		found_jack == false ||
-		found_10 == false)
+	if (found_ace == true &&
+		found_king == true &&
+		found_queen == true &&
+		found_jack == true &&
+		found_10 == true)
 	{
-		return false;
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 
@@ -886,7 +889,6 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 	}
 }
 
-
 bool is_possible_straight_flush(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
 	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
@@ -920,7 +922,7 @@ bool is_possible_straight_flush(const vector<card>& sorted_hand, const vector<ca
 
 	for (size_t i = 0; i < windows.size(); i++)
 	{
-		cout << "Values " << windows[i].value0 << " " << windows[i].value4 << endl;
+//		cout << "Values " << windows[i].value0 << " " << windows[i].value4 << endl;
 
 		bool found_0 = false;
 		const short unsigned int value_0 = windows[i].value0;
@@ -1019,7 +1021,7 @@ bool is_possible_straight_flush(const vector<card>& sorted_hand, const vector<ca
 			num_wildcards_left--;
 		}
 
-		cout << found_0 << " " << found_1 << " " << found_2 << " " << found_3 << " " << found_4 << " " << endl;
+//		cout << found_0 << " " << found_1 << " " << found_2 << " " << found_3 << " " << found_4 << " " << endl;
 
 		if (found_0 == true &&
 			found_1 == true &&

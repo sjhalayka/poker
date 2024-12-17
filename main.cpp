@@ -22,7 +22,7 @@ short unsigned int get_best_wild_classification(const vector<card>& hand, const 
 
 	if (is_possible_royal_flush(temp_hand, remaining_unflipped_cards))
 		best_class = ROYAL_FLUSH;
-	 if (is_possible_straight_flush(temp_hand, remaining_unflipped_cards))
+	else if (is_possible_straight_flush(temp_hand, remaining_unflipped_cards))
 		best_class = STRAIGHT_FLUSH;
 	else if (is_possible_four_of_a_kind(temp_hand, remaining_unflipped_cards))
 		best_class = FOUR_OF_A_KIND;
@@ -62,13 +62,13 @@ int main(void)
 	card c;
 	hand.clear();
 
-	c.value = 4;
-	c.suit = HEARTS;
+	c.value = ACE;
+	c.suit = DIAMONDS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
 	
-	c.value = 5;
-	c.suit = HEARTS;
+	c.value = 10;
+	c.suit = DIAMONDS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
 
