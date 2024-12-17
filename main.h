@@ -797,6 +797,9 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 
 		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 		{
+			if (ci->first == triplet_value)
+				continue;
+
 			if (ci->second >= 2)
 			{
 				num_wildcards -= 2;

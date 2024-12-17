@@ -62,7 +62,7 @@ int main(void)
 	card c;
 	hand.clear();
 
-	c.value = ACE;
+	c.value = 10;
 	c.suit = HEARTS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
