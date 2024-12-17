@@ -739,7 +739,7 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 	{
 		const size_t hand_count = get_value_count(ci->first, sorted_hand);
-		size_t wildcards_needed = 3 - hand_count;
+		const size_t wildcards_needed = 3 - hand_count;
 
 		if (wildcards_needed <= num_wildcards)
 		{
@@ -777,8 +777,7 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 			continue;
 
 		const size_t hand_count = get_value_count(ci->first, sorted_hand);
-
-		size_t wildcards_needed = 2 - hand_count;
+		const size_t wildcards_needed = 2 - hand_count;
 
 		if (wildcards_needed <= num_wildcards)
 		{
