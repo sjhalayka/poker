@@ -736,18 +736,16 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 	bool found_pair = false;
 	bool found_triplet = false;
 
-	//for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
-	//{
-	//	const size_t hand_count = get_value_count(ci->first, sorted_hand);
-	//	const size_t unflipped_count = get_value_count(ci->first, remaining_unflipped_cards);
+	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+	{
+		const size_t hand_count = get_value_count(ci->first, sorted_hand);
 
-	//	if (hand_count + unflipped_count == 3)
-	//		found_triplet = true;
-	//	else if (hand_count + unflipped_count == 2)
-	//		found_pair = true;
-	//}
-		
-	short unsigned int pair_value = 0;
+		if (hand_count == 3)
+			found_triplet = true;
+		else if (hand_count == 2)
+			found_pair = true;
+	}
+
 	short unsigned int triplet_value = 0;
 
 	if (found_triplet == false)
@@ -772,6 +770,9 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 	{
 		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 		{
+			if (ci->first == triplet_value)
+				continue;
+
 			const size_t hand_count = get_value_count(ci->first, sorted_hand);
 			const size_t unflipped_count = get_value_count(ci->first, remaining_unflipped_cards);
 			size_t wildcards_needed = 2 - hand_count;
@@ -780,7 +781,6 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 			{
 				num_wildcards -= wildcards_needed;
 				found_pair = true;
-				pair_value = ci->first;
 				break;
 			}
 		}

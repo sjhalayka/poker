@@ -67,20 +67,20 @@ int main(void)
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
 	
-	c.value = ACE;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
-	remove_card_from_unflipped_cards(c, deck);
-
-	c.value = 7;
-	c.suit = CLUBS;
-	hand.push_back(c);
-	remove_card_from_unflipped_cards(c, deck);
-
 	c.value = 7;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
+
+	//c.value = 7;
+	//c.suit = CLUBS;
+	//hand.push_back(c);
+	//remove_card_from_unflipped_cards(c, deck);
+
+	//c.value = 7;
+	//c.suit = DIAMONDS;
+	//hand.push_back(c);
+	//remove_card_from_unflipped_cards(c, deck);
 
 
 	//c.value = KING;
