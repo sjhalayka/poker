@@ -721,70 +721,94 @@ bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<ca
 	return false;
 }
 
-
-
-
 bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
 	size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+
+	short unsigned int triplet_value = 0;
+	short unsigned int pair_value = 0;
+	bool found_pair = false;
+	bool found_triplet = false;
 
 	map<short unsigned int, size_t> value_counts;
 
 	for (size_t i = 0; i < sorted_hand.size(); i++)
 		value_counts[sorted_hand[i].value]++;
 
-	bool found_pair = false;
-	bool found_triplet = false;
-
+	// Find triplet in hand
 	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 	{
 		const size_t hand_count = get_value_count(ci->first, sorted_hand);
+		size_t wildcards_needed = 3 - hand_count;
 
-		if (hand_count == 3)
+		if (wildcards_needed <= num_wildcards)
+		{
+			num_wildcards -= wildcards_needed;
 			found_triplet = true;
-		else if (hand_count == 2)
-			found_pair = true;
+			triplet_value = ci->first;
+			break;
+		}
 	}
 
-	short unsigned int triplet_value = 0;
-
-	if (found_triplet == false)
+	//  Find triplet in unflipped cards
+	if (found_triplet == false && num_wildcards >= 3)
 	{
+		value_counts.clear();
+
+		for (size_t i = 0; i < remaining_unflipped_cards.size(); i++)
+			value_counts[remaining_unflipped_cards[i].value]++;
+
 		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 		{
-			const size_t hand_count = get_value_count(ci->first, sorted_hand);
-			const size_t unflipped_count = get_value_count(ci->first, remaining_unflipped_cards);
-			size_t wildcards_needed = 3 - hand_count;
-
-			if (wildcards_needed <= num_wildcards)
+			if (ci->second >= 3)
 			{
-				num_wildcards -= wildcards_needed;
-				found_triplet = true;
+				num_wildcards -= 3;
 				triplet_value = ci->first;
+				found_triplet = true;
 				break;
 			}
 		}
 	}
 
-	if (found_pair == false)
+	// Find pair in hand
+	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 	{
+		if (ci->first == triplet_value)
+			continue;
+
+		const size_t hand_count = get_value_count(ci->first, sorted_hand);
+
+		size_t wildcards_needed = 2 - hand_count;
+
+		if (wildcards_needed <= num_wildcards)
+		{
+			num_wildcards -= wildcards_needed;
+			found_pair = true;
+			break;
+		}
+	}
+
+	// Find pair in unflipped cards
+	if (found_pair == false && num_wildcards >= 2)
+	{
+		value_counts.clear();
+
+		for (size_t i = 0; i < remaining_unflipped_cards.size(); i++)
+			value_counts[remaining_unflipped_cards[i].value]++;
+
 		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 		{
-			if (ci->first == triplet_value)
-				continue;
-
-			const size_t hand_count = get_value_count(ci->first, sorted_hand);
-			const size_t unflipped_count = get_value_count(ci->first, remaining_unflipped_cards);
-			size_t wildcards_needed = 2 - hand_count;
-
-			if (wildcards_needed <= num_wildcards)
+			if (ci->second >= 2)
 			{
-				num_wildcards -= wildcards_needed;
+				num_wildcards -= 2;
+				pair_value = ci->first;
 				found_pair = true;
 				break;
 			}
 		}
 	}
+
+
 
 	if (found_pair && found_triplet)
 		return true;

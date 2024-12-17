@@ -20,13 +20,13 @@ short unsigned int get_best_wild_classification(const vector<card>& hand, const 
 
 	short unsigned int best_class = HIGH_CARD;
 
-	if (is_possible_royal_flush(temp_hand, remaining_unflipped_cards))
-		best_class = ROYAL_FLUSH;
+	//if (is_possible_royal_flush(temp_hand, remaining_unflipped_cards))
+	//	best_class = ROYAL_FLUSH;
 	//else if (is_possible_straight_flush(temp_hand, remaining_unflipped_cards))
 	//	best_class = STRAIGHT_FLUSH;
 	//else if (is_possible_four_of_a_kind(temp_hand, remaining_unflipped_cards))
 	//	best_class = FOUR_OF_A_KIND;
-	else if (is_possible_full_house(temp_hand, remaining_unflipped_cards))
+	if (is_possible_full_house(temp_hand, remaining_unflipped_cards))
 		best_class = FULL_HOUSE;
 	else if (is_possible_flush(temp_hand, remaining_unflipped_cards))
 		best_class = FLUSH;
@@ -66,11 +66,11 @@ int main(void)
 	c.suit = HEARTS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
-	
-	c.value = 7;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
-	remove_card_from_unflipped_cards(c, deck);
+	//
+	//c.value = 7;
+	//c.suit = DIAMONDS;
+	//hand.push_back(c);
+	//remove_card_from_unflipped_cards(c, deck);
 
 	//c.value = 7;
 	//c.suit = CLUBS;
