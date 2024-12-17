@@ -757,6 +757,7 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 			if (ci->first != pair_value && get_value_count(ci->first, remaining_unflipped_cards) == 3)
 			{
 				found_triplet = true;
+				triplet_value = ci->first;
 				break;
 			}
 		}
