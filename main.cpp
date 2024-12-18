@@ -25,12 +25,12 @@ int main(void)
 	card c;
 	hand.clear();
 
-	c.value = 10;
+	c.value = KING;
 	c.suit = CLUBS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
 	
-	c.value = 7;
+	c.value = 9;
 	c.suit = CLUBS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);

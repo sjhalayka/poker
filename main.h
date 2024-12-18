@@ -865,20 +865,18 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 	long signed int end_window_pos = min_value + 4 - 1;
 
 	if (start_window_pos < 0)
-	{
 		start_window_pos = 0;
-	}
 
 	const long unsigned int initial_window_pos = start_window_pos;
 
 	while(1)
 	{
 		window w;
-		w.value0 = start_window_pos;
-		w.value1 = start_window_pos + 1;
-		w.value2 = start_window_pos + 2;
-		w.value3 = start_window_pos + 3;
-		w.value4 = start_window_pos + 4;
+		w.value0 = static_cast<short unsigned int>(start_window_pos);
+		w.value1 = static_cast<short unsigned int>(start_window_pos) + 1;
+		w.value2 = static_cast<short unsigned int>(start_window_pos) + 2;
+		w.value3 = static_cast<short unsigned int>(start_window_pos) + 3;
+		w.value4 = static_cast<short unsigned int>(start_window_pos) + 4;
 
 		windows.push_back(w);
 
@@ -888,10 +886,10 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 			break;
 	}
 
-	//cout << "Window vector size " << windows.size() << endl;
+	cout << "Window vector size " << windows.size() << endl;
 
-	//for (size_t i = 0; i < windows.size(); i++)
-	//	cout << windows[i].value0 << " " << windows[i].value4 << endl;
+	for (size_t i = 0; i < windows.size(); i++)
+		cout << windows[i].value0 << " " << windows[i].value4 << endl;
 
 }
 
@@ -1062,12 +1060,8 @@ bool is_possible_straight(const vector<card>& sorted_hand, const vector<card>& r
 	if (windows.size() == 0)
 		return false;
 
-	//cout << windows.size() << endl;
-
 	for (size_t i = 0; i < windows.size(); i++)
 	{
-		//		cout << "Values " << windows[i].value0 << " " << windows[i].value4 << endl;
-
 		bool found_0 = false;
 		const short unsigned int value_0 = windows[i].value0;
 		bool found_1 = false;
