@@ -887,6 +887,12 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 		if (w.value4 > end_window_pos)
 			break;
 	}
+
+	//cout << "Window vector size " << windows.size() << endl;
+
+	//for (size_t i = 0; i < windows.size(); i++)
+	//	cout << windows[i].value0 << " " << windows[i].value4 << endl;
+
 }
 
 bool is_possible_straight_flush(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
@@ -918,12 +924,8 @@ bool is_possible_straight_flush(const vector<card>& sorted_hand, const vector<ca
 	if (windows.size() == 0)
 		return false;
 
-	cout << windows.size() << endl;
-
 	for (size_t i = 0; i < windows.size(); i++)
 	{
-//		cout << "Values " << windows[i].value0 << " " << windows[i].value4 << endl;
-
 		bool found_0 = false;
 		const short unsigned int value_0 = windows[i].value0;
 		bool found_1 = false;
@@ -1034,4 +1036,192 @@ bool is_possible_straight_flush(const vector<card>& sorted_hand, const vector<ca
 	}
 
 	return false;
+}
+
+
+bool is_possible_straight(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
+{
+	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+
+	map<short unsigned int, size_t> value_counts;
+	map<short unsigned int, size_t> suit_counts;
+
+	for (size_t i = 0; i < sorted_hand.size(); i++)
+	{
+		value_counts[sorted_hand[i].value]++;
+		suit_counts[sorted_hand[i].suit]++;
+	}
+
+	// Are all card values distinct?
+	if (value_counts.size() != sorted_hand.size())
+		return false;
+
+	vector<window> windows;
+	get_windows(windows, sorted_hand);
+
+	if (windows.size() == 0)
+		return false;
+
+	//cout << windows.size() << endl;
+
+	for (size_t i = 0; i < windows.size(); i++)
+	{
+		//		cout << "Values " << windows[i].value0 << " " << windows[i].value4 << endl;
+
+		bool found_0 = false;
+		const short unsigned int value_0 = windows[i].value0;
+		bool found_1 = false;
+		const short unsigned int value_1 = windows[i].value1;
+		bool found_2 = false;
+		const short unsigned int value_2 = windows[i].value2;
+		bool found_3 = false;
+		const short unsigned int value_3 = windows[i].value3;
+		bool found_4 = false;
+		const short unsigned int value_4 = windows[i].value4;
+
+		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
+		{
+			if (ci->first == value_0)
+				found_0 = true;
+			if (ci->first == value_1)
+				found_1 = true;
+			if (ci->first == value_2)
+				found_2 = true;
+			if (ci->first == value_3)
+				found_3 = true;
+			if (ci->first == value_4)
+				found_4 = true;
+		}
+
+		size_t num_wildcards_left = num_wildcards;
+
+		if (false == found_0 && num_wildcards_left > 0)
+		{
+			card c;
+			c.value = value_0;
+
+			if (value_0 == 1)
+				c.value = ACE;
+
+			size_t count = get_value_count(c.value, remaining_unflipped_cards);
+
+			if (count > 0)
+				found_0 = true;
+
+			num_wildcards_left--;
+		}
+
+		if (false == found_1 && num_wildcards_left > 0)
+		{
+			card c;
+			c.value = value_1;
+
+			if (value_1 == 1)
+				c.value = ACE;
+
+			size_t count = get_value_count(c.value, remaining_unflipped_cards);
+
+			if (count > 0)
+				found_1 = true;
+
+			num_wildcards_left--;
+		}
+
+		if (false == found_2 && num_wildcards_left > 0)
+		{
+			card c;
+			c.value = value_2;
+
+			if (value_2 == 1)
+				c.value = ACE;
+
+			size_t count = get_value_count(c.value, remaining_unflipped_cards);
+
+			if (count > 0)
+				found_2 = true;
+
+			num_wildcards_left--;
+		}
+
+		if (false == found_3 && num_wildcards_left > 0)
+		{
+			card c;
+			c.value = value_3;
+
+			if (value_3 == 1)
+				c.value = ACE;
+
+			size_t count = get_value_count(c.value, remaining_unflipped_cards);
+
+			if (count > 0)
+				found_3 = true;
+
+			num_wildcards_left--;
+		}
+
+		if (false == found_4 && num_wildcards_left > 0)
+		{
+			card c;
+			c.value = value_4;
+
+			if (value_4 == 1)
+				c.value = ACE;
+
+			size_t count = get_value_count(c.value, remaining_unflipped_cards);
+
+			if (count > 0)
+				found_4 = true;
+
+			num_wildcards_left--;
+		}
+
+		if (found_0 == true &&
+			found_1 == true &&
+			found_2 == true &&
+			found_3 == true &&
+			found_4 == true)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+short unsigned int get_best_wild_classification(const vector<card>& hand, const vector<card>& remaining_unflipped_cards)
+{
+	vector<card> temp_hand = hand;
+
+	if (temp_hand.size() >= MAX_NUM_CARDS_PER_HAND || temp_hand.size() == 0)
+	{
+		cout << "Error: hand must contain between 1 and 4 cards" << endl;
+		return HIGH_CARD;
+	}
+
+	// THIS IS IMPORTANT
+	sort_cards(temp_hand);
+
+	short unsigned int best_class = HIGH_CARD;
+
+	if (is_possible_royal_flush(temp_hand, remaining_unflipped_cards))
+		best_class = ROYAL_FLUSH;
+	else if (is_possible_straight_flush(temp_hand, remaining_unflipped_cards))
+		best_class = STRAIGHT_FLUSH;
+	else if (is_possible_four_of_a_kind(temp_hand, remaining_unflipped_cards))
+		best_class = FOUR_OF_A_KIND;
+	else if (is_possible_full_house(temp_hand, remaining_unflipped_cards))
+		best_class = FULL_HOUSE;
+	else if (is_possible_flush(temp_hand, remaining_unflipped_cards))
+		best_class = FLUSH;
+	else if (is_possible_straight(temp_hand, remaining_unflipped_cards))
+		best_class = STRAIGHT;
+	else if (is_possible_three_of_a_kind(temp_hand, remaining_unflipped_cards))
+		best_class = THREE_OF_A_KIND;
+	else if (is_possible_two_pair(temp_hand, remaining_unflipped_cards))
+		best_class = TWO_PAIR;
+	else if (is_possible_one_pair(temp_hand, remaining_unflipped_cards))
+		best_class = ONE_PAIR;
+
+	return best_class;
 }
