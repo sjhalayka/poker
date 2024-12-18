@@ -120,23 +120,9 @@ void init_deck(vector<card>& deck)
 	}
 }
 
-void shuffle_cards(vector<card>& cards, const size_t iterations)
+void shuffle_cards(vector<card>& cards)
 {
-	if (cards.size() < 2)
-		return;
-
-	for (size_t i = 0; i < iterations; i++)
-	{
-		size_t card_1 = rand() % (cards.size() - 1);
-		size_t card_2 = rand() % (cards.size() - 1);
-
-		if (card_1 != card_2)
-		{
-			card tempc = cards[card_1];
-			cards[card_1] = cards[card_2];
-			cards[card_2] = tempc;
-		}
-	}
+	random_shuffle(cards.begin(), cards.end());
 }
 
 void sort_cards(vector<card>& cards)
@@ -595,7 +581,7 @@ bool is_possible_one_pair(const vector<card>& sorted_hand, const vector<card>& r
 	{
 		if (ci->second >= 2)
 			return true;
-		else if (get_value_count(ci->first, remaining_unflipped_cards) >= 1)
+		else if (num_wildcards >= 1 && get_value_count(ci->first, remaining_unflipped_cards) >= 1)
 			return true;
 	}
 
@@ -620,7 +606,7 @@ bool is_possible_one_pair(const vector<card>& sorted_hand, const vector<card>& r
 
 bool is_possible_two_pair(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 
@@ -632,9 +618,14 @@ bool is_possible_two_pair(const vector<card>& sorted_hand, const vector<card>& r
 	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 	{
 		if (ci->second >= 2)
+		{
 			pair_count++;
-		else if (get_value_count(ci->first, remaining_unflipped_cards) >= 1)
+		}
+		else if (num_wildcards >= 1 && get_value_count(ci->first, remaining_unflipped_cards) >= 1)
+		{
+			num_wildcards--;
 			pair_count++;
+		}
 	}
 
 	if (pair_count >= 2)
@@ -664,10 +655,6 @@ bool is_possible_two_pair(const vector<card>& sorted_hand, const vector<card>& r
 }
 
 
-
-
-
-// buggy
 bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
 	size_t num_wildcards_remaining = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
@@ -681,10 +668,8 @@ bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<c
 	{
 		if (ci->second >= 3)
 			return true;
-		else if (get_value_count(ci->first, remaining_unflipped_cards) >= 3 - ci->second)
+		else if (num_wildcards_remaining >= 3 - ci->second && get_value_count(ci->first, remaining_unflipped_cards) >= 3 - ci->second)
 			return true;
-		else
-			num_wildcards_remaining--;
 	}
 
 	// If we made it this far then we're dealing with 
@@ -704,14 +689,9 @@ bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<c
 	return false;
 }
 
-
-
-// buggy
 bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
 	size_t num_wildcards_remaining = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
-
-
 
 	map<short unsigned int, size_t> value_counts;
 
@@ -720,16 +700,11 @@ bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<ca
 
 	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 	{
-		if (0)//get_value_count(ci->first, remaining_unflipped_cards) >= 4 - ci->second)
+		if (ci->second >= 4)
 			return true;
-		else if (ci->second >= 4)
+		else if (num_wildcards_remaining >= 4 - ci->second && get_value_count(ci->first, remaining_unflipped_cards) >= 4 - ci->second)
 			return true;
-		else
-			num_wildcards_remaining -= get_value_count(ci->first, sorted_hand);
 	}
-
-	cout << "wtf" << endl;
-
 
 	// If we made it this far then we're dealing with 
 	// making a quad purely out of the remaining unflipped cards
@@ -747,6 +722,8 @@ bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<ca
 
 	return false;
 }
+
+
 
 bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
@@ -900,10 +877,10 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 			break;
 	}
 
-	cout << "Window vector size " << windows.size() << endl;
+	//cout << "Window vector size " << windows.size() << endl;
 
-	for (size_t i = 0; i < windows.size(); i++)
-		cout << windows[i].value0 << " " << windows[i].value4 << endl;
+	//for (size_t i = 0; i < windows.size(); i++)
+	//	cout << windows[i].value0 << " " << windows[i].value4 << endl;
 
 }
 

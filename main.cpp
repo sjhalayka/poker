@@ -6,33 +6,32 @@ int main(void)
 
 	vector<card> deck;
 	init_deck(deck);
-	shuffle_cards(deck, 1000000);
+	shuffle_cards(deck);
 
 	vector<card> hand;
-//	deal_hand(deck, hand, 3);
-//print_hand_classification(classify_hand(hand));
-//	
+	deal_hand(deck, hand, 4);
 
 
-	card c;
-	hand.clear();
 
-	c.value = 3;
-	c.suit = CLUBS;
-	hand.push_back(c);
-	remove_card_from_unflipped_cards(c, deck);
-	
-	c.value = 3;
-	c.suit = DIAMONDS;
-	hand.push_back(c);
-	remove_card_from_unflipped_cards(c, deck);
+	//card c;
+	//hand.clear();
 
-	c.value = 7;
-	c.suit = SPADES;
-	hand.push_back(c);
-	remove_card_from_unflipped_cards(c, deck);
+	//c.value = ACE;
+	//c.suit = CLUBS;
+	//hand.push_back(c);
+	//remove_card_from_unflipped_cards(c, deck);
+	//
+	//c.value = ACE;
+	//c.suit = DIAMONDS;
+	//hand.push_back(c);
+	//remove_card_from_unflipped_cards(c, deck);
 
 	//c.value = 7;
+	//c.suit = SPADES;
+	//hand.push_back(c);
+	//remove_card_from_unflipped_cards(c, deck);
+
+	//c.value = 6;
 	//c.suit = DIAMONDS;
 	//hand.push_back(c);
 	//remove_card_from_unflipped_cards(c, deck);
@@ -47,17 +46,9 @@ int main(void)
 
 	
 	
-
-
 	print_hand_classification(get_best_wild_classification(hand, deck));
 
 	print_cards(hand);
-
-
-
-
-
-
 
 	return 0;
 }
