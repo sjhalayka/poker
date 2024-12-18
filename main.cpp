@@ -15,7 +15,7 @@ int main(void)
 
 		short unsigned int c = get_best_wild_classification(hand, deck);
 
-		if (c >= STRAIGHT_FLUSH)
+		if (c == FULL_HOUSE)
 		{
 			print_hand_classification(c);
 			print_cards(hand);
