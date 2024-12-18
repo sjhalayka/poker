@@ -32,7 +32,7 @@ int main(void)
 
 		//if (c >= FULL_HOUSE)
 		//{
-		//	print_hand_classification(c);
+		//	print_hand_classification(classification);
 		//	print_cards(hand);
 		//	cout << endl;
 		//}
