@@ -67,7 +67,7 @@ int main(void)
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
 	
-	c.value = 10;
+	c.value = 7;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
