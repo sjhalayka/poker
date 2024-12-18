@@ -4,13 +4,24 @@ int main(void)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	vector<card> deck;
-	init_deck(deck);
-	shuffle_cards(deck);
+	while (1)
+	{
+		vector<card> deck;
+		init_deck(deck);
+		shuffle_cards(deck);
 
-	vector<card> hand;
-	deal_hand(deck, hand, 4);
+		vector<card> hand;
+		deal_hand(deck, hand, 4);
 
+		short unsigned int c = get_best_wild_classification(hand, deck);
+
+		if (c >= STRAIGHT_FLUSH)
+		{
+			print_hand_classification(c);
+			print_cards(hand);
+			cout << endl;
+		}
+	}
 
 
 	//card c;
@@ -45,10 +56,10 @@ int main(void)
 	//hand.push_back(c);
 
 	
-	
+	/*
 	print_hand_classification(get_best_wild_classification(hand, deck));
 
-	print_cards(hand);
+	print_cards(hand);*/
 
 	return 0;
 }

@@ -939,8 +939,6 @@ bool is_possible_straight_flush(vector<card> sorted_hand, const vector<card>& re
 
 		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 		{
-			cout << "first " << ci->first << endl;
-
 			if (ci->first == value_0)
 				found_0 = true;
 			else if (ci->first == value_1)
@@ -1024,13 +1022,6 @@ bool is_possible_straight_flush(vector<card> sorted_hand, const vector<card>& re
 
 			num_wildcards_left--;
 		}
-
-		cout << "test straight flush" << endl;
-
-		cout << found_0 << " " << found_1 << " " << found_2 << " " << found_3 << " " << found_4 << " " << endl;
-
-
-//		cout << found_0 << " " << found_1 << " " << found_2 << " " << found_3 << " " << found_4 << " " << endl;
 
 		if (found_0 == true &&
 			found_1 == true &&
