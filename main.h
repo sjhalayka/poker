@@ -664,9 +664,13 @@ bool is_possible_two_pair(const vector<card>& sorted_hand, const vector<card>& r
 }
 
 
+
+
+
+// buggy
 bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	size_t num_wildcards_remaining = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 
@@ -679,11 +683,13 @@ bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<c
 			return true;
 		else if (get_value_count(ci->first, remaining_unflipped_cards) >= 3 - ci->second)
 			return true;
+		else
+			num_wildcards_remaining--;
 	}
 
 	// If we made it this far then we're dealing with 
-	// making a triplet purely out of the remaining unflipped cards
-	if (num_wildcards >= 3)
+	// making a quad purely out of the remaining unflipped cards
+	if (num_wildcards_remaining == 3)
 	{
 		value_counts.clear();
 
@@ -700,9 +706,12 @@ bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<c
 
 
 
+// buggy
 bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	size_t num_wildcards_remaining = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+
+
 
 	map<short unsigned int, size_t> value_counts;
 
@@ -711,15 +720,20 @@ bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<ca
 
 	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 	{
-		if (ci->second >= 4)
+		if (0)//get_value_count(ci->first, remaining_unflipped_cards) >= 4 - ci->second)
 			return true;
-		else if (get_value_count(ci->first, remaining_unflipped_cards) >= 4 - ci->second)
+		else if (ci->second >= 4)
 			return true;
+		else
+			num_wildcards_remaining -= get_value_count(ci->first, sorted_hand);
 	}
+
+	cout << "wtf" << endl;
+
 
 	// If we made it this far then we're dealing with 
 	// making a quad purely out of the remaining unflipped cards
-	if (num_wildcards >= 4)
+	if (num_wildcards_remaining == 4)
 	{
 		value_counts.clear();
 
@@ -864,8 +878,8 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 	long signed int start_window_pos = max_value - 4;
 	long signed int end_window_pos = min_value + 4 - 1;
 
-	if (start_window_pos < 0)
-		start_window_pos = 0;
+	if (start_window_pos < 1)
+		start_window_pos = 1;
 
 	const long unsigned int initial_window_pos = start_window_pos;
 
@@ -893,12 +907,23 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 
 }
 
-bool is_possible_straight_flush(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
+bool is_possible_straight_flush(vector<card> sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
 	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 	map<short unsigned int, size_t> suit_counts;
+
+	bool is_all_five_or_less_except_ace = true;
+
+	for (size_t i = 0; i < sorted_hand.size(); i++)
+		if (sorted_hand[i].value > 5 && sorted_hand[i].value != ACE)
+			is_all_five_or_less_except_ace = false;
+
+	if (is_all_five_or_less_except_ace)
+		for (size_t i = 0; i < sorted_hand.size(); i++)
+			if (sorted_hand[i].value == ACE)
+				sorted_hand[i].value = 1;
 
 	for (size_t i = 0; i < sorted_hand.size(); i++)
 	{
@@ -937,15 +962,17 @@ bool is_possible_straight_flush(const vector<card>& sorted_hand, const vector<ca
 
 		for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 		{
+			cout << "first " << ci->first << endl;
+
 			if (ci->first == value_0)
 				found_0 = true;
-			if (ci->first == value_1)
+			else if (ci->first == value_1)
 				found_1 = true;
-			if (ci->first == value_2)
+			else if (ci->first == value_2)
 				found_2 = true;
-			if (ci->first == value_3)
+			else if (ci->first == value_3)
 				found_3 = true;
-			if (ci->first == value_4)
+			else if (ci->first == value_4)
 				found_4 = true;
 		}
 
@@ -1021,6 +1048,11 @@ bool is_possible_straight_flush(const vector<card>& sorted_hand, const vector<ca
 			num_wildcards_left--;
 		}
 
+		cout << "test straight flush" << endl;
+
+		cout << found_0 << " " << found_1 << " " << found_2 << " " << found_3 << " " << found_4 << " " << endl;
+
+
 //		cout << found_0 << " " << found_1 << " " << found_2 << " " << found_3 << " " << found_4 << " " << endl;
 
 		if (found_0 == true &&
@@ -1037,12 +1069,23 @@ bool is_possible_straight_flush(const vector<card>& sorted_hand, const vector<ca
 }
 
 
-bool is_possible_straight(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
+bool is_possible_straight(vector<card> sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
 	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 	map<short unsigned int, size_t> suit_counts;
+
+	bool is_all_five_or_less_except_ace = true;
+
+	for (size_t i = 0; i < sorted_hand.size(); i++)
+		if (sorted_hand[i].value > 5 && sorted_hand[i].value != ACE)
+			is_all_five_or_less_except_ace = false;
+
+	if (is_all_five_or_less_except_ace)
+		for (size_t i = 0; i < sorted_hand.size(); i++)
+			if (sorted_hand[i].value == ACE)
+				sorted_hand[i].value = 1;
 
 	for (size_t i = 0; i < sorted_hand.size(); i++)
 	{

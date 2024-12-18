@@ -1,13 +1,5 @@
 #include "main.h"
 
-
-
-
-
-
-
-
-
 int main(void)
 {
 	srand(static_cast<unsigned int>(time(0)));
@@ -17,28 +9,28 @@ int main(void)
 	shuffle_cards(deck, 1000000);
 
 	vector<card> hand;
-	//deal_hand(deck, hand, 3);
+//	deal_hand(deck, hand, 3);
 //print_hand_classification(classify_hand(hand));
-	
+//	
 
 
 	card c;
 	hand.clear();
 
-	c.value = KING;
+	c.value = 3;
 	c.suit = CLUBS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
 	
-	c.value = 9;
-	c.suit = CLUBS;
+	c.value = 3;
+	c.suit = DIAMONDS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
 
-	//c.value = 7;
-	//c.suit = CLUBS;
-	//hand.push_back(c);
-	//remove_card_from_unflipped_cards(c, deck);
+	c.value = 7;
+	c.suit = SPADES;
+	hand.push_back(c);
+	remove_card_from_unflipped_cards(c, deck);
 
 	//c.value = 7;
 	//c.suit = DIAMONDS;
