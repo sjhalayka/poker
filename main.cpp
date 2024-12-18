@@ -16,7 +16,7 @@ int main(void)
 
 		vector<card> hand;
 
-		size_t num_init_cards = 5;
+		size_t num_init_cards = MAX_NUM_CARDS_PER_HAND;
 
 		deal_hand(deck, hand, num_init_cards);
 
@@ -29,13 +29,6 @@ int main(void)
 
 		hand_class_counts[classification]++;
 
-
-		//if (c >= FULL_HOUSE)
-		//{
-		//	print_hand_classification(classification);
-		//	print_cards(hand);
-		//	cout << endl;
-		//}
 	}
 
 
@@ -48,6 +41,17 @@ int main(void)
 
 		out_file << ci->first << " " << ci->second << endl;
 	}
+
+
+
+
+
+	//if (c >= FULL_HOUSE)
+	//{
+	//	print_hand_classification(classification);
+	//	print_cards(hand);
+	//	cout << endl;
+	//}
 
 	//card c;
 	//hand.clear();
