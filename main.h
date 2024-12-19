@@ -430,14 +430,10 @@ bool is_possible_flush(const vector<card>& sorted_hand, const vector<card>& rema
 {
 	const size_t num_open_slots = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
-	map<short unsigned int, size_t> value_counts;
 	map<short unsigned int, size_t> suit_counts;
 
 	for (size_t i = 0; i < sorted_hand.size(); i++)
-	{
-		value_counts[sorted_hand[i].value]++;
 		suit_counts[sorted_hand[i].suit]++;
-	}
 
 	// Is there only one suit?
 	if (suit_counts.size() != 1)
@@ -445,6 +441,7 @@ bool is_possible_flush(const vector<card>& sorted_hand, const vector<card>& rema
 
 	size_t the_suit_count = get_suit_count(suit_counts.begin()->first, remaining_unflipped_cards);
 
+	// Is there enough of the suit remaining to fill all open slots?
 	if (the_suit_count < num_open_slots)
 		return false;
 

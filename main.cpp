@@ -6,7 +6,7 @@ int main(void)
 
 	map<short unsigned int, size_t> hand_class_counts;
 
-	size_t count = 1000000;
+	size_t count = 100000;
 
 	for(size_t i = 0; i < count; i++)
 	{
@@ -16,7 +16,7 @@ int main(void)
 
 		vector<card> hand;
 
-		const size_t num_init_cards = MAX_NUM_CARDS_PER_HAND;
+		const size_t num_init_cards = 4;// MAX_NUM_CARDS_PER_HAND;
 
 		deal_hand(deck, hand, num_init_cards);
 
