@@ -428,7 +428,7 @@ size_t get_suit_count(const short unsigned int suit, const vector<card>& remaini
 
 bool is_possible_flush(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	const size_t num_open_slots = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 	map<short unsigned int, size_t> suit_counts;
@@ -445,7 +445,7 @@ bool is_possible_flush(const vector<card>& sorted_hand, const vector<card>& rema
 
 	size_t the_suit_count = get_suit_count(suit_counts.begin()->first, remaining_unflipped_cards);
 
-	if (the_suit_count < num_wildcards)
+	if (the_suit_count < num_open_slots)
 		return false;
 
 	return true;
@@ -455,7 +455,7 @@ bool is_possible_flush(const vector<card>& sorted_hand, const vector<card>& rema
 
 bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	const size_t num_open_slots = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 	map<short unsigned int, size_t> suit_counts;
@@ -497,9 +497,9 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 			found_10 = true;
 	}
 
-	size_t num_wildcards_left = num_wildcards;
+	size_t num_open_slots_left = num_open_slots;
 
-	if (false == found_ace && num_wildcards_left > 0)
+	if (false == found_ace && num_open_slots_left > 0)
 	{
 		card c;
 		c.suit = the_suit;
@@ -507,10 +507,10 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 		found_ace = is_card_in_unflipped_cards(c, remaining_unflipped_cards);
 
-		num_wildcards_left--;
+		num_open_slots_left--;
 	}
 
-	if (false == found_king && num_wildcards_left > 0)
+	if (false == found_king && num_open_slots_left > 0)
 	{
 		card c;
 		c.suit = the_suit;
@@ -518,10 +518,10 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 		found_king = is_card_in_unflipped_cards(c, remaining_unflipped_cards);
 
-		num_wildcards_left--;
+		num_open_slots_left--;
 	}
 
-	if (false == found_queen && num_wildcards_left > 0)
+	if (false == found_queen && num_open_slots_left > 0)
 	{
 		card c;
 		c.suit = the_suit;
@@ -529,10 +529,10 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 		found_queen = is_card_in_unflipped_cards(c, remaining_unflipped_cards);
 
-		num_wildcards_left--;
+		num_open_slots_left--;
 	}
 
-	if (false == found_jack && num_wildcards_left > 0)
+	if (false == found_jack && num_open_slots_left > 0)
 	{
 		card c;
 		c.suit = the_suit;
@@ -540,10 +540,10 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 		found_jack = is_card_in_unflipped_cards(c, remaining_unflipped_cards);
 
-		num_wildcards_left--;
+		num_open_slots_left--;
 	}
 
-	if (false == found_10 && num_wildcards_left > 0)
+	if (false == found_10 && num_open_slots_left > 0)
 	{
 		card c;
 		c.suit = the_suit;
@@ -551,7 +551,7 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 		found_10 = is_card_in_unflipped_cards(c, remaining_unflipped_cards);
 
-		num_wildcards_left--;
+		num_open_slots_left--;
 	}
 
 	if (found_ace == true &&
@@ -571,7 +571,7 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 bool is_possible_one_pair(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	const size_t num_open_slots = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 
@@ -582,13 +582,13 @@ bool is_possible_one_pair(const vector<card>& sorted_hand, const vector<card>& r
 	{
 		if (ci->second >= 2)
 			return true;
-		else if (num_wildcards >= 1 && get_value_count(ci->first, remaining_unflipped_cards) >= 1)
+		else if (num_open_slots >= 1 && get_value_count(ci->first, remaining_unflipped_cards) >= 1)
 			return true;
 	}
 
 	// If we made it this far then we're dealing with 
 	// making a pair purely out of the remaining unflipped cards
-	if (num_wildcards >= 2)
+	if (num_open_slots >= 2)
 	{
 		value_counts.clear();
 
@@ -607,7 +607,7 @@ bool is_possible_one_pair(const vector<card>& sorted_hand, const vector<card>& r
 
 bool is_possible_two_pair(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	size_t num_open_slots = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 
@@ -622,9 +622,9 @@ bool is_possible_two_pair(const vector<card>& sorted_hand, const vector<card>& r
 		{
 			pair_count++;
 		}
-		else if (num_wildcards >= 1 && get_value_count(ci->first, remaining_unflipped_cards) >= 1)
+		else if (num_open_slots >= 1 && get_value_count(ci->first, remaining_unflipped_cards) >= 1)
 		{
-			num_wildcards--;
+			num_open_slots--;
 			pair_count++;
 		}
 	}
@@ -635,9 +635,9 @@ bool is_possible_two_pair(const vector<card>& sorted_hand, const vector<card>& r
 	// If we made it this far then we're dealing with 
 	// making two pair purely out of the remaining unflipped cards
 
-	const size_t num_wildcards_needed = 2 * (2 - pair_count);
+	const size_t num_open_slots_needed = 2 * (2 - pair_count);
 
-	if (num_wildcards >= num_wildcards_needed)
+	if (num_open_slots >= num_open_slots_needed)
 	{
 		value_counts.clear();
 
@@ -658,7 +658,7 @@ bool is_possible_two_pair(const vector<card>& sorted_hand, const vector<card>& r
 
 bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	size_t num_wildcards_remaining = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	size_t num_open_slots_remaining = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 
@@ -669,13 +669,13 @@ bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<c
 	{
 		if (ci->second >= 3)
 			return true;
-		else if (num_wildcards_remaining >= 3 - ci->second && get_value_count(ci->first, remaining_unflipped_cards) >= 3 - ci->second)
+		else if (num_open_slots_remaining >= 3 - ci->second && get_value_count(ci->first, remaining_unflipped_cards) >= 3 - ci->second)
 			return true;
 	}
 
 	// If we made it this far then we're dealing with 
 	// making a quad purely out of the remaining unflipped cards
-	if (num_wildcards_remaining == 3)
+	if (num_open_slots_remaining == 3)
 	{
 		value_counts.clear();
 
@@ -692,7 +692,7 @@ bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<c
 
 bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	size_t num_wildcards_remaining = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	size_t num_open_slots_remaining = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 
@@ -703,13 +703,13 @@ bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<ca
 	{
 		if (ci->second >= 4)
 			return true;
-		else if (num_wildcards_remaining >= 4 - ci->second && get_value_count(ci->first, remaining_unflipped_cards) >= 4 - ci->second)
+		else if (num_open_slots_remaining >= 4 - ci->second && get_value_count(ci->first, remaining_unflipped_cards) >= 4 - ci->second)
 			return true;
 	}
 
 	// If we made it this far then we're dealing with 
 	// making a quad purely out of the remaining unflipped cards
-	if (num_wildcards_remaining == 4)
+	if (num_open_slots_remaining == 4)
 	{
 		value_counts.clear();
 
@@ -728,7 +728,7 @@ bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<ca
 
 bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	size_t num_open_slots = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	short unsigned int triplet_value = 0;
 	short unsigned int pair_value = 0;
@@ -744,11 +744,11 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 	{
 		const size_t hand_count = get_value_count(ci->first, sorted_hand);
-		const size_t wildcards_needed = 3 - hand_count;
+		const size_t open_slots_needed = 3 - hand_count;
 
-		if (wildcards_needed <= num_wildcards)
+		if (open_slots_needed <= num_open_slots)
 		{
-			num_wildcards -= wildcards_needed;
+			num_open_slots -= open_slots_needed;
 			found_triplet = true;
 			triplet_value = ci->first;
 			break;
@@ -756,7 +756,7 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 	}
 
 	//  Find triplet in unflipped cards
-	if (found_triplet == false && num_wildcards >= 3)
+	if (found_triplet == false && num_open_slots >= 3)
 	{
 		value_counts.clear();
 
@@ -767,7 +767,7 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 		{
 			if (ci->second >= 3)
 			{
-				num_wildcards -= 3;
+				num_open_slots -= 3;
 				triplet_value = ci->first;
 				found_triplet = true;
 				break;
@@ -782,18 +782,18 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 			continue;
 
 		const size_t hand_count = get_value_count(ci->first, sorted_hand);
-		const size_t wildcards_needed = 2 - hand_count;
+		const size_t open_slots_needed = 2 - hand_count;
 
-		if (wildcards_needed <= num_wildcards)
+		if (open_slots_needed <= num_open_slots)
 		{
-			num_wildcards -= wildcards_needed;
+			num_open_slots -= open_slots_needed;
 			found_pair = true;
 			break;
 		}
 	}
 
 	// Find pair in unflipped cards
-	if (found_pair == false && num_wildcards >= 2)
+	if (found_pair == false && num_open_slots >= 2)
 	{
 		value_counts.clear();
 
@@ -807,7 +807,7 @@ bool is_possible_full_house(const vector<card>& sorted_hand, const vector<card>&
 
 			if (ci->second >= 2)
 			{
-				num_wildcards -= 2;
+				num_open_slots -= 2;
 				pair_value = ci->first;
 				found_pair = true;
 				break;
@@ -887,7 +887,7 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 
 bool is_possible_straight_flush(vector<card> sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	const size_t num_open_slots = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 	map<short unsigned int, size_t> suit_counts;
@@ -952,9 +952,9 @@ bool is_possible_straight_flush(vector<card> sorted_hand, const vector<card>& re
 				found_4 = true;
 		}
 
-		size_t num_wildcards_left = num_wildcards;
+		size_t num_open_slots_left = num_open_slots;
 
-		if (false == found_0 && num_wildcards_left > 0)
+		if (false == found_0 && num_open_slots_left > 0)
 		{
 			card c;
 			c.suit = the_suit;
@@ -965,10 +965,10 @@ bool is_possible_straight_flush(vector<card> sorted_hand, const vector<card>& re
 
 			found_0 = is_card_in_unflipped_cards(c, remaining_unflipped_cards);
 
-			num_wildcards_left--;
+			num_open_slots_left--;
 		}
 
-		if (false == found_1 && num_wildcards_left > 0)
+		if (false == found_1 && num_open_slots_left > 0)
 		{
 			card c;
 			c.suit = the_suit;
@@ -979,10 +979,10 @@ bool is_possible_straight_flush(vector<card> sorted_hand, const vector<card>& re
 
 			found_1 = is_card_in_unflipped_cards(c, remaining_unflipped_cards);
 
-			num_wildcards_left--;
+			num_open_slots_left--;
 		}
 
-		if (false == found_2 && num_wildcards_left > 0)
+		if (false == found_2 && num_open_slots_left > 0)
 		{
 			card c;
 			c.suit = the_suit;
@@ -993,10 +993,10 @@ bool is_possible_straight_flush(vector<card> sorted_hand, const vector<card>& re
 
 			found_2 = is_card_in_unflipped_cards(c, remaining_unflipped_cards);
 
-			num_wildcards_left--;
+			num_open_slots_left--;
 		}
 
-		if (false == found_3 && num_wildcards_left > 0)
+		if (false == found_3 && num_open_slots_left > 0)
 		{
 			card c;
 			c.suit = the_suit;
@@ -1007,10 +1007,10 @@ bool is_possible_straight_flush(vector<card> sorted_hand, const vector<card>& re
 
 			found_3 = is_card_in_unflipped_cards(c, remaining_unflipped_cards);
 
-			num_wildcards_left--;
+			num_open_slots_left--;
 		}
 
-		if (false == found_4 && num_wildcards_left > 0)
+		if (false == found_4 && num_open_slots_left > 0)
 		{
 			card c;
 			c.suit = the_suit;
@@ -1021,7 +1021,7 @@ bool is_possible_straight_flush(vector<card> sorted_hand, const vector<card>& re
 			
 			found_4 = is_card_in_unflipped_cards(c, remaining_unflipped_cards);
 
-			num_wildcards_left--;
+			num_open_slots_left--;
 		}
 
 		if (found_0 == true &&
@@ -1040,7 +1040,7 @@ bool is_possible_straight_flush(vector<card> sorted_hand, const vector<card>& re
 
 bool is_possible_straight(vector<card> sorted_hand, const vector<card>& remaining_unflipped_cards)
 {
-	const size_t num_wildcards = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
+	const size_t num_open_slots = MAX_NUM_CARDS_PER_HAND - sorted_hand.size();
 
 	map<short unsigned int, size_t> value_counts;
 	map<short unsigned int, size_t> suit_counts;
@@ -1099,9 +1099,9 @@ bool is_possible_straight(vector<card> sorted_hand, const vector<card>& remainin
 				found_4 = true;
 		}
 
-		size_t num_wildcards_left = num_wildcards;
+		size_t num_open_slots_left = num_open_slots;
 
-		if (false == found_0 && num_wildcards_left > 0)
+		if (false == found_0 && num_open_slots_left > 0)
 		{
 			card c;
 			c.value = value_0;
@@ -1114,10 +1114,10 @@ bool is_possible_straight(vector<card> sorted_hand, const vector<card>& remainin
 			if (count > 0)
 				found_0 = true;
 
-			num_wildcards_left--;
+			num_open_slots_left--;
 		}
 
-		if (false == found_1 && num_wildcards_left > 0)
+		if (false == found_1 && num_open_slots_left > 0)
 		{
 			card c;
 			c.value = value_1;
@@ -1130,10 +1130,10 @@ bool is_possible_straight(vector<card> sorted_hand, const vector<card>& remainin
 			if (count > 0)
 				found_1 = true;
 
-			num_wildcards_left--;
+			num_open_slots_left--;
 		}
 
-		if (false == found_2 && num_wildcards_left > 0)
+		if (false == found_2 && num_open_slots_left > 0)
 		{
 			card c;
 			c.value = value_2;
@@ -1146,10 +1146,10 @@ bool is_possible_straight(vector<card> sorted_hand, const vector<card>& remainin
 			if (count > 0)
 				found_2 = true;
 
-			num_wildcards_left--;
+			num_open_slots_left--;
 		}
 
-		if (false == found_3 && num_wildcards_left > 0)
+		if (false == found_3 && num_open_slots_left > 0)
 		{
 			card c;
 			c.value = value_3;
@@ -1162,10 +1162,10 @@ bool is_possible_straight(vector<card> sorted_hand, const vector<card>& remainin
 			if (count > 0)
 				found_3 = true;
 
-			num_wildcards_left--;
+			num_open_slots_left--;
 		}
 
-		if (false == found_4 && num_wildcards_left > 0)
+		if (false == found_4 && num_open_slots_left > 0)
 		{
 			card c;
 			c.value = value_4;
@@ -1178,7 +1178,7 @@ bool is_possible_straight(vector<card> sorted_hand, const vector<card>& remainin
 			if (count > 0)
 				found_4 = true;
 
-			num_wildcards_left--;
+			num_open_slots_left--;
 		}
 
 		if (found_0 == true &&
@@ -1195,7 +1195,7 @@ bool is_possible_straight(vector<card> sorted_hand, const vector<card>& remainin
 }
 
 
-short unsigned int get_best_wild_classification(const vector<card>& hand, const vector<card>& remaining_unflipped_cards)
+short unsigned int get_best_classification(const vector<card>& hand, const vector<card>& remaining_unflipped_cards)
 {
 	vector<card> temp_hand = hand;
 

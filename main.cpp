@@ -6,7 +6,7 @@ int main(void)
 
 	map<short unsigned int, size_t> hand_class_counts;
 
-	size_t count = 100000;
+	size_t count = 1000000;
 
 	for(size_t i = 0; i < count; i++)
 	{
@@ -16,16 +16,20 @@ int main(void)
 
 		vector<card> hand;
 
-		size_t num_init_cards = MAX_NUM_CARDS_PER_HAND;
+		const size_t num_init_cards = MAX_NUM_CARDS_PER_HAND;
 
 		deal_hand(deck, hand, num_init_cards);
 
 		short unsigned int classification = 0;
 		
 		if (num_init_cards < 5)
-			classification = get_best_wild_classification(hand, deck);
+			classification = get_best_classification(hand, deck);
 		else
 			classification = classify_hand(hand);
+
+		hand_class_counts[classification]++;
+
+
 
 		//if (classification == FULL_HOUSE)
 		//{
@@ -33,9 +37,6 @@ int main(void)
 		//	print_cards(hand);
 		//	cout << endl;
 		//}
-
-		hand_class_counts[classification]++;
-
 	}
 
 
@@ -50,15 +51,6 @@ int main(void)
 	}
 
 
-
-
-
-	//if (c >= FULL_HOUSE)
-	//{
-	//	print_hand_classification(classification);
-	//	print_cards(hand);
-	//	cout << endl;
-	//}
 
 	//card c;
 	//hand.clear();
@@ -83,19 +75,8 @@ int main(void)
 	//hand.push_back(c);
 	//remove_card_from_unflipped_cards(c, deck);
 
-
-	//c.value = KING;
-	//c.suit = DIAMONDS;
-	//hand.push_back(c);
-	//c.value = 9;
-	//c.suit = HEARTS;
-	//hand.push_back(c);
-
-	
-	/*
-	print_hand_classification(get_best_wild_classification(hand, deck));
-
-	print_cards(hand);*/
+	//print_hand_classification(get_best_classification(hand, deck));
+	//print_cards(hand);
 
 	return 0;
 }
