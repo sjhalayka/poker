@@ -6,7 +6,7 @@ int main(void)
 
 	map<short unsigned int, size_t> hand_class_counts;
 
-	size_t count = 1000000;
+	size_t count = 100000;
 
 	for(size_t i = 0; i < count; i++)
 	{
@@ -26,6 +26,13 @@ int main(void)
 			classification = get_best_wild_classification(hand, deck);
 		else
 			classification = classify_hand(hand);
+
+		//if (classification == FULL_HOUSE)
+		//{
+		//	print_hand_classification(classification);
+		//	print_cards(hand);
+		//	cout << endl;
+		//}
 
 		hand_class_counts[classification]++;
 
