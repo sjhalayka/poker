@@ -8,7 +8,7 @@ int main(void)
 
 	const size_t count = 2598960;
 
-	const size_t num_init_cards = 5;// MAX_NUM_CARDS_PER_HAND;
+	const size_t num_init_cards = 4;//MAX_NUM_CARDS_PER_HAND;
 
 	for(size_t i = 0; i < count; i++)
 	{
@@ -24,7 +24,7 @@ int main(void)
 
 		short unsigned int classification = 0;
 		
-		if (num_init_cards < 5)
+		if (num_init_cards < MAX_NUM_CARDS_PER_HAND)
 			classification = get_best_classification(hand, deck);
 		else
 			classification = classify_hand(hand);

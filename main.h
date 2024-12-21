@@ -204,7 +204,7 @@ bool is_straight(const vector<card>& sorted_hand)
 	for (size_t i = 0; i < MAX_NUM_CARDS_PER_HAND; i++)
 		value_counts[sorted_hand[i].value]++;
 
-	if (value_counts.size() == 5)
+	if (value_counts.size() == MAX_NUM_CARDS_PER_HAND)
 	{
 		if (sorted_hand[4].value == ACE)
 		{
@@ -225,7 +225,6 @@ bool is_straight(const vector<card>& sorted_hand)
 				return true;
 		}
 	}
-
 
 	return false;
 }
