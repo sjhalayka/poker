@@ -8,12 +8,12 @@ int main(void)
 
 	const size_t count = 2598960;
 
-	const size_t num_init_cards = 4;//MAX_NUM_CARDS_PER_HAND;
+	const size_t num_init_cards = 1;//MAX_NUM_CARDS_PER_HAND;
 
 	for(size_t i = 0; i < count; i++)
 	{
 		if (i % 10000 == 0)
-			cout << i / static_cast<float>(count) << endl;
+			cout << i / static_cast<long double>(count) << endl;
 
 		vector<card> deck;
 		init_deck(deck);
@@ -30,8 +30,6 @@ int main(void)
 			classification = classify_hand(hand);
 
 		hand_class_counts[classification]++;
-
-
 
 		//if (classification == FULL_HOUSE)
 		//{
@@ -55,7 +53,7 @@ int main(void)
 	}
 
 
-
+	// Use the following code to test each classifier
 	//card c;
 	//hand.clear();
 
