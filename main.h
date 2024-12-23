@@ -853,9 +853,6 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 	long signed int start_window_pos = max_value - 4;
 	long signed int end_window_pos = min_value + 4 - 1;
 
-	if (start_window_pos < 1)
-		start_window_pos = 1; // low ace
-
 	while(1)
 	{
 		window w;

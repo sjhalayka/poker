@@ -62,22 +62,22 @@ int main(void)
 
 	vector<card> hand;
 
-	c.value = ACE;
-	c.suit = CLUBS;
-	hand.push_back(c);
-	remove_card_from_unflipped_cards(c, deck);
+	//c.value = 9;
+	//c.suit = CLUBS;
+	//hand.push_back(c);
+	//remove_card_from_unflipped_cards(c, deck);
 
-	c.value = QUEEN;
+	c.value = 3;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
 
-	c.value = KING;
-	c.suit = SPADES;
+	c.value = 4;
+	c.suit = DIAMONDS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
 
-	c.value = JACK;
+	c.value = 5;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
