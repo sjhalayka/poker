@@ -57,11 +57,11 @@ public:
 		{
 			if (value == JACK)
 				cout << "Jack";
-			if (value == QUEEN)
+			else if (value == QUEEN)
 				cout << "Queen";
-			if (value == KING)
+			else if (value == KING)
 				cout << "King";
-			if (value == ACE)
+			else if (value == ACE)
 				cout << "Ace";
 		}
 		else
@@ -482,7 +482,7 @@ bool is_possible_royal_flush(const vector<card>& sorted_hand, const vector<card>
 
 	for (map<short unsigned int, size_t>::const_iterator ci = value_counts.begin(); ci != value_counts.end(); ci++)
 	{
-		if (ci->first == ACE || ci->first == 1)
+		if (ci->first == ACE)
 			found_ace = true;
 		else if (ci->first == KING)
 			found_king = true;
@@ -854,9 +854,7 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 	long signed int end_window_pos = min_value + 4 - 1;
 
 	if (start_window_pos < 1)
-		start_window_pos = 1;
-
-	const long unsigned int initial_window_pos = start_window_pos;
+		start_window_pos = 1; // low ace
 
 	while(1)
 	{
@@ -871,14 +869,14 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 
 		start_window_pos++;
 
-		if (w.value4 > end_window_pos)
+		if (w.value4 > end_window_pos || w.value4 == ACE)
 			break;
 	}
 
-	//cout << "Window vector size " << windows.size() << endl;
+	cout << "Window vector size " << windows.size() << endl;
 
-	//for (size_t i = 0; i < windows.size(); i++)
-	//	cout << windows[i].value0 << " " << windows[i].value4 << endl;
+	for (size_t i = 0; i < windows.size(); i++)
+		cout << windows[i].value0 << " " << windows[i].value4 << endl;
 
 }
 
