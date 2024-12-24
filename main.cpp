@@ -67,17 +67,17 @@ int main(void)
 	//hand.push_back(c);
 	//remove_card_from_unflipped_cards(c, deck);
 
-	c.value = 3;
+	c.value = 10;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
 
-	c.value = 4;
+	c.value = JACK;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
 
-	c.value = 5;
+	c.value = 9;
 	c.suit = DIAMONDS;
 	hand.push_back(c);
 	remove_card_from_unflipped_cards(c, deck);
