@@ -870,10 +870,10 @@ void get_windows(vector<window> &windows, vector<card> sorted_hand)
 			break;
 	}
 
-	cout << "Window vector size " << windows.size() << endl;
+	//cout << "Window vector size " << windows.size() << endl;
 
-	for (size_t i = 0; i < windows.size(); i++)
-		cout << windows[i].value0 << " " << windows[i].value4 << endl;
+	//for (size_t i = 0; i < windows.size(); i++)
+	//	cout << windows[i].value0 << " " << windows[i].value4 << endl;
 
 }
 
