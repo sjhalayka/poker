@@ -583,10 +583,16 @@ bool is_possible_one_pair(const vector<card>& sorted_hand, const vector<card>& r
 			return true;
 	}
 
+
+
+
+
 	// If we made it this far then we're dealing with 
 	// making a pair purely out of the remaining unflipped cards
 	if (num_open_slots >= 2)
 	{
+		cout << "last ditch effort" << endl;
+
 		value_counts.clear();
 
 		for (size_t i = 0; i < remaining_unflipped_cards.size(); i++)
@@ -629,6 +635,12 @@ bool is_possible_two_pair(const vector<card>& sorted_hand, const vector<card>& r
 	if (pair_count >= 2)
 		return true;
 
+
+
+
+
+
+
 	// If we made it this far then we're dealing with 
 	// making two pair purely out of the remaining unflipped cards
 
@@ -670,8 +682,14 @@ bool is_possible_three_of_a_kind(const vector<card>& sorted_hand, const vector<c
 			return true;
 	}
 
+
+
+
+
+
+
 	// If we made it this far then we're dealing with 
-	// making a quad purely out of the remaining unflipped cards
+	// making a triplet purely out of the remaining unflipped cards
 	if (num_open_slots_remaining == 3)
 	{
 		value_counts.clear();
@@ -703,6 +721,12 @@ bool is_possible_four_of_a_kind(const vector<card>& sorted_hand, const vector<ca
 		else if (num_open_slots_remaining >= 4 - ci->second && get_value_count(ci->first, remaining_unflipped_cards) >= 4 - ci->second)
 			return true;
 	}
+
+
+
+
+
+
 
 	// If we made it this far then we're dealing with 
 	// making a quad purely out of the remaining unflipped cards
